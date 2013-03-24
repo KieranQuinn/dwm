@@ -784,50 +784,6 @@ Monitor * dirtomon(int dir) {
 	return m;
 }
 
-/*void drawbar(Monitor *m) {
-	int x;
-	unsigned int i, occ = 0, urg = 0;
-	unsigned long *col;
-	Client *c;
-	resizebarwin(m);
-	for(c = m->clients; c; c = c->next) {
-		occ |= c->tags;
-		if(c->isurgent)
-			urg |= c->tags;
-	}
-	dc.x = 0;
-	for(i = 0; i < LENGTH(tags); i++) {
-		dc.w = TEXTW(tags[i].name);
-		col = dc.colors[ (m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2:(occ & 1 << i ? 3:0)) ];
-        drawtext(tags[i].name, col, urg & 1 << i);
-        dc.x += dc.w;
-	}
-	dc.w = blw = TEXTW(m->ltsymbol);
-	drawtext(m->ltsymbol, dc.colors[0], True);
-	dc.x += dc.w;
-	x = dc.x;
-	if(m == selmon) {
-		dc.w = TEXTW(stext);
-		dc.x = m->ww - dc.w;
-		if(showsystray && m == selmon) {
-			dc.x -= getsystraywidth();
-		}
-		if(dc.x < x) {
-			dc.x = x;
-			dc.w = m->ww - x;
-		}
-		drawcoloredtext(stext);
-	}
-	else
-		dc.x = m->ww;
-	if((dc.w = dc.x - x) > bh) {
-		dc.x = x;
-		drawtext(NULL, dc.colors[0], False);
-	}
-	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
-	XSync(dpy, False);
-}*/
-
 void drawbar(Monitor *m) {
 	int x;
 	unsigned int i, occ = 0, urg = 0;
