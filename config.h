@@ -25,7 +25,7 @@ static const char colors[NUMCOLORS][ColLast][13] = {
 	{ "#EEEEEE", "#666666", "#222222" },				// 01 - regular
 	{ "#222222", "#FFFFFF", "#222222" },				// 02 - selected
 	{ "#222222", "#FF0000", "#222222" },				// 03 - urgent
-	{ "#222222", "#333333", "#222222" }, 				// 04 - occupied
+	{ "#222222", "#3C3C3C", "#222222" }, 				// 04 - occupied
 	{ "#222222", "#A82222", "#222222" }, 				// 05 - red
 	{ "#222222", "#1F7B94", "#222222" }, 				// 06 - blue
 	{ "#222222", "#349147", "#222222" }, 				// 07 - green
@@ -47,12 +47,12 @@ static const Layout layouts[] = {
 
 static const Tag tags[] = {
 	/* name			layout			mfact		nmaster */
-	{ "     web",	&layouts[0],  	-1,		    -1 },
-	{ "     chat",	&layouts[0],   	-1,		    -1 },
-	{ "     term",	&layouts[3],  	-1,		    -1 },
-	{ "     code",	&layouts[0],  	-1,			-1 },
-	{ "     media",	&layouts[0],   	-1,		    -1 },
-	{ "     misc",	&layouts[0],  	-1,		    -1 },
+	{ "    web",	&layouts[0],  	-1,		    -1 },
+	{ "    chat",	&layouts[0],   	-1,		    -1 },
+	{ "    term",	&layouts[3],  	-1,		    -1 },
+	{ "    code",	&layouts[0],  	-1,			-1 },
+	{ "    media",	&layouts[0],   	-1,		    -1 },
+	{ "    misc",	&layouts[0],  	-1,		    -1 },
 };
 
 static const Rule rules[] = {

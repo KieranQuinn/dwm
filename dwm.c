@@ -841,24 +841,23 @@ void drawcoloredtext(char *text) {
 	unsigned long *col = dc.colors[0];
 	int i, ox = dc.x;
 	while(ptr) {
-		for( i = 0; *ptr < 0 || *ptr > NUMCOLORS; i++, ptr++);
+		for(i = 0; *ptr < 0 || *ptr > NUMCOLORS; i++, ptr++);
 		if(!*ptr) break;
 		c=*ptr;
 		*ptr = 0;
-		if( i ) {
+		if(i) {
 			dc.w = selmon->ww - dc.x;
 			drawtext(buf, col, first);
 			dc.x += textnw(buf, i) + textnw(&c,1);
 			if(first) dc.x += ( dc.font.ascent + dc.font.descent ) / 2;
 			first = False;
-		} else if(first) {
-			ox = dc.x += textnw(&c,1);
 		}
+		else if(first) ox = dc.x += textnw(&c,1);
 		*ptr = c;
 		col = dc.colors[ c-1 ];
 		buf = ++ptr;
 	}
-	if( !first ) dc.x-=(dc.font.ascent+dc.font.descent)/2;
+	if(!first) dc.x-=(dc.font.ascent+dc.font.descent)/2;
 	drawtext(buf, col, True);
 	dc.x = ox;
 }
@@ -868,18 +867,15 @@ void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	int i, x, y, h, len, olen;
 	XSetForeground(dpy, dc.gc, col[ ColBG ]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
-	if(!text)
-		return;
+	if(!text) return;
 	olen = strlen(text);
 	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
 	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
-	x = dc.x + (h / 2);
+	x = dc.x + (pad / 2);
 	for(len = MIN(olen, sizeof buf); len && textnw(text, len) > dc.w - h; len--);
-	if(!len)
-		return;
+	if(!len) return;
 	memcpy(buf, text, len);
-	if(len < olen)
-		for(i = len; i && i > len - 3; buf[--i] = '.');
+	if(len < olen) for(i = len; i && i > len - 3; buf[--i] = '.');
 	XSetForeground(dpy, dc.gc, col[ ColFG ]);
 	if(dc.font.set)
 		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
@@ -899,8 +895,7 @@ void enternotify(XEvent *e) {
 		unfocus(selmon->sel, True);
 		selmon = m;
 	}
-	else if(!c || c == selmon->sel)
-		return;
+	else if(!c || c == selmon->sel) return;
 	focus(c);
 }
 
@@ -927,8 +922,7 @@ void focus(Client *c) {
 		XSetWindowBorder(dpy, c->win, dc.colors[1][ColBorder]);
 		setfocus(c);
 	}
-	else
-		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
+	else XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 	selmon->sel = c;
 	drawbars();
 }
@@ -1502,8 +1496,7 @@ void scan(void) {
 	XWindowAttributes wa;
 	if(XQueryTree(dpy, root, &d1, &d2, &wins, &num)) {
 		for(i = 0; i < num; i++) {
-			if(!XGetWindowAttributes(dpy, wins[i], &wa)
-			|| wa.override_redirect || XGetTransientForHint(dpy, wins[i], &d1))
+			if(!XGetWindowAttributes(dpy, wins[i], &wa) || wa.override_redirect || XGetTransientForHint(dpy, wins[i], &d1))
 				continue;
 			if(wa.map_state == IsViewable || getstate(wins[i]) == IconicState)
 				manage(wins[i], &wa);
@@ -1511,8 +1504,7 @@ void scan(void) {
 		for(i = 0; i < num; i++) { /* now the transients */
 			if(!XGetWindowAttributes(dpy, wins[i], &wa))
 				continue;
-			if(XGetTransientForHint(dpy, wins[i], &d1)
-			&& (wa.map_state == IsViewable || getstate(wins[i]) == IconicState))
+			if(XGetTransientForHint(dpy, wins[i], &d1) && (wa.map_state == IsViewable || getstate(wins[i]) == IconicState))
 				manage(wins[i], &wa);
 		}
 		if(wins)
@@ -1536,8 +1528,7 @@ void sendmon(Client *c, Monitor *m) {
 
 void setclientstate(Client *c, long state) {
 	long data[] = { state, None };
-	XChangeProperty(dpy, c->win, wmatom[WMState], wmatom[WMState], 32,
-			PropModeReplace, (unsigned char *)data, 2);
+	XChangeProperty(dpy, c->win, wmatom[WMState], wmatom[WMState], 32, PropModeReplace, (unsigned char *)data, 2);
 }
 
 Bool sendevent(Window w, Atom proto, int mask, long d0, long d1, long d2, long d3, long d4) {
@@ -1590,8 +1581,7 @@ void setfullscreen(Client *c, Bool fullscreen) {
 		XRaiseWindow(dpy, c->win);
 	}
 	else {
-		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
-		                PropModeReplace, (unsigned char*)0, 0);
+		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32, PropModeReplace, (unsigned char*)0, 0);
 		c->isfullscreen = False;
 		c->isfloating = c->oldstate;
 		c->bw = c->oldbw;
@@ -1677,8 +1667,7 @@ void setup(void) {
 	updatebars();
 	updatestatus();
 	/* EWMH support per view */
-	XChangeProperty(dpy, root, netatom[NetSupported], XA_ATOM, 32,
-			PropModeReplace, (unsigned char *) netatom, NetLast);
+	XChangeProperty(dpy, root, netatom[NetSupported], XA_ATOM, 32, PropModeReplace, (unsigned char *) netatom, NetLast);
 	/* select for events */
 	wa.cursor = cursor[CurNormal];
 	wa.event_mask = SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|PointerMotionMask |EnterWindowMask|LeaveWindowMask|StructureNotifyMask|PropertyChangeMask;
