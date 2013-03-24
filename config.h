@@ -72,7 +72,7 @@ static const char *term[] = { "urxvtc", NULL, "URxvt" };
 static const char *edit[] = { "geany", NULL, "Geany" };
 static const char *mdia[] = { "vlc", NULL, "Vlc" };
 static const char *file[] = { "pcmanfm", NULL, "Pcmanfm" };
-static const char *prts[] = { "scrot", "~/Pictures" };
+static const char *prts[] = { "scrot", NULL, "~/Pictures" };
 
 static Key keys[] = {
 	{ MONKEY,       	XK_p, 		spawn,          {.v = menu } },
