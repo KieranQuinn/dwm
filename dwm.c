@@ -784,8 +784,28 @@ Monitor * dirtomon(int dir) {
 	return m;
 }
 
+void drawbars(void) {
+	Monitor *m;
+	for(m = mons; m; m = m->next)
+		drawbar(m);
+}
+
+
+/*void
+drawsquare(Bool filled, Bool empty, Bool invert, unsigned long col[ColLast]) {
+    int x;
+
+    XSetForeground(dpy, dc.gc, col[invert ? ColBG : ColFG]);
+    x = (dc.font.ascent + dc.font.descent + 2) / 4;
+    if(filled)
+        XFillRectangle(dpy, dc.drawable, dc.gc, dc.x+1, dc.y+1, x+1, x+1);
+    else if(empty)
+        XDrawRectangle(dpy, dc.drawable, dc.gc, dc.x+1, dc.y+1, x, x);
+}*/
+
+
 void drawbar(Monitor *m) {
-	int x;
+	int x, y;
 	unsigned int i, occ = 0, urg = 0;
 	unsigned long *col;
 	Client *c;
@@ -798,8 +818,19 @@ void drawbar(Monitor *m) {
 	dc.x = 0;
 	for(i = 0; i < LENGTH(tags); i++) {
 		dc.w = TEXTW(tags[i].name);
-		col = dc.colors[ (m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2:(occ & 1 << i ? 3:0)) ];
-        drawtext(tags[i].name, col, urg & 1 << i);
+		col = dc.colors[(m->tagset[m->seltags] & 1 << i ? 1:(urg & 1 << i ? 2:0))];
+		drawtext(tags[i].name, col, True);
+		
+		//drawsquare(m == selmon && selmon->sel && selmon->sel->tags & 1 << i, occ & 1 << i, urg & 1 << i, col);
+		
+		//if (m == selmon && selmon->sel && selmon->sel->tags & 1 << i) {
+			y = (dc.font.ascent+dc.font.descent + 2) / 4;
+			XGCValues gcv;
+			gcv.foreground = col[ColFG];
+			XChangeGC(dpy, dc.gc, GCForeground, &gcv);
+			XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, (dc.h - y), dc.w, y);
+		
+		
         dc.x += dc.w;
 	}
 	dc.w = blw = TEXTW(m->ltsymbol);
@@ -828,11 +859,28 @@ void drawbar(Monitor *m) {
 	XSync(dpy, False);
 }
 
-void drawbars(void) {
-	Monitor *m;
-	for(m = mons; m; m = m->next)
-		drawbar(m);
-	updatesystray();
+void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
+	char buf[256];
+	int i, x, y, h, len, olen;
+	XSetForeground(dpy, dc.gc, col[ColBG]);
+	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
+	if(!text)
+		return;
+	olen = strlen(text);
+	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
+	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
+ 	x = dc.x + (h / 2);
+	for(len = MIN(olen, sizeof buf); len && textnw(text, len) > dc.w - h; len--);
+	if(!len)
+		return;
+	memcpy(buf, text, len);
+	if(len < olen)
+		for(i = len; i && i > len - 3; buf[--i] = '.');
+	XSetForeground(dpy, dc.gc, col[ColFG]);
+	if(dc.font.set)
+		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
+	else
+		XDrawString(dpy, dc.drawable, dc.gc, x, y, buf, len);
 }
 
 void drawcoloredtext(char *text) {
@@ -860,27 +908,6 @@ void drawcoloredtext(char *text) {
 	if(!first) dc.x-=(dc.font.ascent+dc.font.descent)/2;
 	drawtext(buf, col, True);
 	dc.x = ox;
-}
-
-void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
-	char buf[256];
-	int i, x, y, h, len, olen;
-	XSetForeground(dpy, dc.gc, col[ ColBG ]);
-	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
-	if(!text) return;
-	olen = strlen(text);
-	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
-	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
-	x = dc.x + (pad / 2);
-	for(len = MIN(olen, sizeof buf); len && textnw(text, len) > dc.w - h; len--);
-	if(!len) return;
-	memcpy(buf, text, len);
-	if(len < olen) for(i = len; i && i > len - 3; buf[--i] = '.');
-	XSetForeground(dpy, dc.gc, col[ ColFG ]);
-	if(dc.font.set)
-		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
-	else
-		XDrawString(dpy, dc.drawable, dc.gc, x, y, buf, len);
 }
 
 void enternotify(XEvent *e) {
@@ -1626,7 +1653,7 @@ void setup(void) {
 	initfont(font);
 	sw = DisplayWidth(dpy, screen);
 	sh = DisplayHeight(dpy, screen);
-	bh = dc.h = dc.font.height + 5;
+	bh = dc.h = dc.font.height + 7;
 	updategeom();
 	/* init atoms */
 	wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False);
@@ -1815,7 +1842,6 @@ void unmanage(Client *c, Bool destroyed) {
 void unmapnotify(XEvent *e) {
 	Client *c;
 	XUnmapEvent *ev = &e->xunmap;
-
 	if((c = wintoclient(ev->window))) {
 		if(ev->send_event)
 			setclientstate(c, WithdrawnState);
@@ -1841,9 +1867,7 @@ void updatebars(void) {
 		w = m->ww;
 		if(showsystray && m == selmon)
 			w -= getsystraywidth();
-		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, DefaultDepth(dpy, screen),                
-		                          CopyFromParent, DefaultVisual(dpy, screen),
-		                          CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, DefaultDepth(dpy, screen), CopyFromParent, DefaultVisual(dpy, screen), CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 		XDefineCursor(dpy, m->barwin, cursor[CurNormal]);
 		XMapRaised(dpy, m->barwin);
 	}
@@ -1945,8 +1969,7 @@ void updatenumlockmask(void) {
 	modmap = XGetModifierMapping(dpy);
 	for(i = 0; i < 8; i++)
 		for(j = 0; j < modmap->max_keypermod; j++)
-			if(modmap->modifiermap[i * modmap->max_keypermod + j]
-			   == XKeysymToKeycode(dpy, XK_Num_Lock))
+			if(modmap->modifiermap[i * modmap->max_keypermod + j] == XKeysymToKeycode(dpy, XK_Num_Lock))
 				numlockmask = (1 << i);
 	XFreeModifiermap(modmap);
 }
@@ -2274,12 +2297,10 @@ void togglefloating(const Arg *arg) {
 	if(!selmon->sel)
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
-	if(selmon->sel->isfloating)
-		/*restore last known float dimensions*/
+	if(selmon->sel->isfloating) /*restore last known float dimensions*/
 		resize(selmon->sel, selmon->sel->sfx, selmon->sel->sfy,
 		       selmon->sel->sfw, selmon->sel->sfh, False);
-	else {
-		/*save last known float dimensions*/
+	else { /*save last known float dimensions*/
 		selmon->sel->sfx = selmon->sel->x;
 		selmon->sel->sfy = selmon->sel->y;
 		selmon->sel->sfw = selmon->sel->w;

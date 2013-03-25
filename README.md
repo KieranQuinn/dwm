@@ -27,6 +27,8 @@ What it includes
 	
 To do
 -----
+* selected tag underline
+* bstack gaps
 * tag padding
 * reload
 * statusbar in C
