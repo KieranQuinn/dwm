@@ -20,6 +20,7 @@ What it includes
 * systray
 * occupiedcol
 * uselessgaps
+* keysymfix
 * bstack
 * runorraise
 	

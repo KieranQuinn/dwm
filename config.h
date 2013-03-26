@@ -39,25 +39,25 @@ static const char colors[NUMCOLORS][ColLast][13] = {
 
 static const Layout layouts[] = {
 	/*	symbol		gaps		arrange */
-	{ "þ",		True,	    tile	},
-	{ "ü",   	True,	    bstack	},
-	{ "ÿ",  	False,	    monocle	},
-	{ "ý",		False,	    NULL	},
+	{ "  þ  ",		True,	    tile	},
+	{ "  ü  ",   	True,	    bstack	},
+	{ "  ÿ  ",  	False,	    monocle	},
+	{ "  ý  ",		False,	    NULL	},
 };
 
 static const Tag tags[] = {
 	/* name			layout			mfact		nmaster */
-	{ "web",	&layouts[0],  	-1,		    -1 },
-	{ "chat",	&layouts[0],   	-1,		    -1 },
-	{ "term",	&layouts[3],  	-1,		    -1 },
-	{ "code",	&layouts[0],  	-1,			-1 },
-	{ "media",	&layouts[0],  	-1,			-1 },
-	{ "misc",	&layouts[0],  	-1,		    -1 },
+	{ "  web  ",	&layouts[0],  	-1,		    -1 },
+	{ "  chat  ",	&layouts[0],   	-1,		    -1 },
+	{ "  term  ",	&layouts[3],  	-1,		    -1 },
+	{ "  code  ",	&layouts[0],  	-1,			-1 },
+	{ "  media  ",	&layouts[0],  	-1,			-1 },
+	{ "  misc  ",	&layouts[0],  	-1,		    -1 },
 };
 
 static const Rule rules[] = {
     /* class         	instance   	title 	    tags mask    	isfloating		iscentred   	monitor */
-	{ "Chromium",			NULL,       NULL,       1 << 0,    		False,   		False,			-1 },
+	{ "Chromium",		NULL,       NULL,       1 << 0,    		False,   		False,			-1 },
 	{ "Skype",			NULL,       NULL,       1 << 1,       	False,       	False,			-1 },
 	{ "URxvt",			NULL,       NULL,       1 << 2,       	True,       	True,			-1 },
 	{ "Geany",			NULL,       NULL,       1 << 3,       	False,       	False,			-1 },
