@@ -57,7 +57,7 @@ static const Tag tags[] = {
 
 static const Rule rules[] = {
     /* class         	instance   	title 	    tags mask    	isfloating		iscentred   	monitor */
-	{ "Chromium",		NULL,       NULL,       1 << 0,    		False,   		False,			-1 },
+	{ "Chromium",			NULL,       NULL,       1 << 0,    		False,   		False,			-1 },
 	{ "Skype",			NULL,       NULL,       1 << 1,       	False,       	False,			-1 },
 	{ "URxvt",			NULL,       NULL,       1 << 2,       	True,       	True,			-1 },
 	{ "Geany",			NULL,       NULL,       1 << 3,       	False,       	False,			-1 },

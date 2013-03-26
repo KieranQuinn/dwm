@@ -856,8 +856,6 @@ void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	memcpy(buf, text, len);
 	if(len < olen)
 		for(i = len; i && i > len - 3; buf[--i] = '.');
-		
-		
 	XSetForeground(dpy, dc.gc, col[ColFG]);
 	if(dc.font.set)
 		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
@@ -872,22 +870,27 @@ void drawcoloredtext(char *text) {
 	int i, ox = dc.x;
 	while(ptr) {
 		for(i = 0; *ptr < 0 || *ptr > NUMCOLORS; i++, ptr++);
-		if(!*ptr) break;
-		c=*ptr;
+			if(!*ptr)
+				break;
+		c = *ptr;
 		*ptr = 0;
 		if(i) {
 			dc.w = selmon->ww - dc.x;
 			drawtext(buf, col, first);
-			dc.x += textnw(buf, i) + textnw(&c,1);
-			if(first) dc.x += ( dc.font.ascent + dc.font.descent ) / 2;
+			dc.x += textnw(buf, i) + textnw(&c, 1);
+			if(first)
+				dc.x += (dc.font.ascent + dc.font.descent) / 2;
 			first = False;
 		}
-		else if(first) ox = dc.x += textnw(&c,1);
+		else if(first)
+			ox = dc.x += textnw(&c, 1);
 		*ptr = c;
-		col = dc.colors[ c-1 ];
+		col = dc.colors[c - 1];
 		buf = ++ptr;
 	}
-	if(!first) dc.x-=(dc.font.ascent+dc.font.descent)/2;
+	if(!first)
+		dc.x -= (dc.font.ascent + dc.font.descent) / 2;
+		
 	drawtext(buf, col, True);
 	dc.x = ox;
 }
