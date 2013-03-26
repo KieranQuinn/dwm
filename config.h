@@ -14,35 +14,35 @@ static const unsigned int borderpx			= 1;        // border pixel of windows
 static const unsigned int snap				= 32;       // snap pixel
 static const Bool showbar					= True;     // false means no bar
 static const Bool topbar					= True;     // false means bottom bar
-static const float mfact					= 0.55; 	// factor of master area size [0.05..0.95]
+static const float mfact					= 0.50; 	// factor of master area size [0.05..0.95]
 static const int nmaster					= 1;   		// number of clients in master area
 static const Bool resizehints				= False; 	// true means respect size hints in tiled resizals
 
-static const char font[] = "-*-stlarch-*-*-*-*-14-*-*-*-*-*-*-*"",""-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
+static const char font[] = "-*-ohsnap.icons-medium-r-*-*-14-*-*-*-*-*-*-*";
 
 static const char colors[NUMCOLORS][ColLast][13] = {
     /* border    fg       	bg */
-	{ "#EEEEEE", "#666666", "#222222" },				// 01 - regular
-	{ "#222222", "#FFFFFF", "#222222" },				// 02 - selected
+	{ "#222222", "#666666", "#222222" },				// 01 - regular
+	{ "#FFFFFF", "#FFFFFF", "#222222" },				// 02 - selected
 	{ "#222222", "#FF0000", "#222222" },				// 03 - urgent
 	{ "#222222", "#FFFFFF", "#222222" }, 				// 04 - occupied
-	{ "#222222", "#A82222", "#222222" }, 				// 05 - red
-	{ "#222222", "#1F7B94", "#222222" }, 				// 06 - blue
-	{ "#222222", "#349147", "#222222" }, 				// 07 - green
-	{ "#222222", "#333333", "#222222" }, 				// 08 - dark grey
-	{ "#222222", "#DCDCDC", "#222222" }, 				// 09 - light grey
-	{ "#222222", "#08736C", "#222222" }, 				// 0A - teal
-	{ "#222222", "#B86A6A", "#222222" }, 				// 0B - pink
-	{ "#222222", "#FFFFFF", "#222222" }, 				// 0C - white
-	{ "#222222", "#000000", "#222222" }, 				// 0D - black
+	{ "#A82222", "#A82222", "#222222" }, 				// 05 - red
+	{ "#1F7B94", "#1F7B94", "#222222" }, 				// 06 - blue
+	{ "#349147", "#349147", "#222222" }, 				// 07 - green
+	{ "#666666", "#666666", "#222222" }, 				// 08 - dark grey
+	{ "#DCDCDC", "#DCDCDC", "#222222" }, 				// 09 - light grey
+	{ "#08736C", "#08736C", "#222222" }, 				// 0A - teal
+	{ "#B86A6A", "#B86A6A", "#222222" }, 				// 0B - pink
+	{ "#FFFFFF", "#FFFFFF", "#222222" }, 				// 0C - white
+	{ "#000000", "#000000", "#222222" }, 				// 0D - black
 };
 
 static const Layout layouts[] = {
 	/*	symbol		gaps		arrange */
-	{ "\uE002",		True,	    tile	},
-	{ "\uE003",   	True,	    bstack	},
-	{ "\uE000",  	False,	    monocle	},
-	{ "\uE0B1",		False,	    NULL	},
+	{ "þ",		True,	    tile	},
+	{ "ü",   	True,	    bstack	},
+	{ "ÿ",  	False,	    monocle	},
+	{ "ý",		False,	    NULL	},
 };
 
 static const Tag tags[] = {
@@ -51,7 +51,7 @@ static const Tag tags[] = {
 	{ "chat",	&layouts[0],   	-1,		    -1 },
 	{ "term",	&layouts[3],  	-1,		    -1 },
 	{ "code",	&layouts[0],  	-1,			-1 },
-	{ "media",	&layouts[0],   	-1,		    -1 },
+	{ "media",	&layouts[0],  	-1,			-1 },
 	{ "misc",	&layouts[0],  	-1,		    -1 },
 };
 
@@ -113,7 +113,7 @@ static Key keys[] = {
 	TAGKEYS(        	XK_3,    	2)
 	TAGKEYS(        	XK_4,   	3)
 	TAGKEYS(          	XK_5,   	4)
-	TAGKEYS(      		XK_6,     	5)
+	TAGKEYS(          	XK_6,   	5)
 };
 
 static Button buttons[] = {

@@ -1,17 +1,15 @@
 Requirements
 ------------
 * Xlib header files
-* stlarch & terminus fonts
+* ohsnap & terminus fonts
 
 Instructions
 ------------
 
 	git clone https://github.com/KieranQuinn/dwm.git
 	cd dwm && sudo make clean install
-
-
-
-
+	
+	
 What it includes
 ----------------
 * statuscolors
@@ -27,13 +25,12 @@ What it includes
 	
 To do
 -----
-* selected tag underline
+* re-write bar and text
+	* tag padding
+	* selected tag underline
+	* systray bg colour fix
 * bstack gaps
-* tag padding
 * reload
-* statusbar in C
-* colouring
-* clean/remove code
 
 Screenshot
 ----------

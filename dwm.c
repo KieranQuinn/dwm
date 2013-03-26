@@ -790,22 +790,8 @@ void drawbars(void) {
 		drawbar(m);
 }
 
-
-/*void
-drawsquare(Bool filled, Bool empty, Bool invert, unsigned long col[ColLast]) {
-    int x;
-
-    XSetForeground(dpy, dc.gc, col[invert ? ColBG : ColFG]);
-    x = (dc.font.ascent + dc.font.descent + 2) / 4;
-    if(filled)
-        XFillRectangle(dpy, dc.drawable, dc.gc, dc.x+1, dc.y+1, x+1, x+1);
-    else if(empty)
-        XDrawRectangle(dpy, dc.drawable, dc.gc, dc.x+1, dc.y+1, x, x);
-}*/
-
-
 void drawbar(Monitor *m) {
-	int x, y;
+	int x;
 	unsigned int i, occ = 0, urg = 0;
 	unsigned long *col;
 	Client *c;
@@ -818,20 +804,9 @@ void drawbar(Monitor *m) {
 	dc.x = 0;
 	for(i = 0; i < LENGTH(tags); i++) {
 		dc.w = TEXTW(tags[i].name);
-		col = dc.colors[(m->tagset[m->seltags] & 1 << i ? 1:(urg & 1 << i ? 2:0))];
+		col = dc.colors[(m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2:(occ & 1 << i ? 3:0))];
 		drawtext(tags[i].name, col, True);
-		
-		//drawsquare(m == selmon && selmon->sel && selmon->sel->tags & 1 << i, occ & 1 << i, urg & 1 << i, col);
-		
-		//if (m == selmon && selmon->sel && selmon->sel->tags & 1 << i) {
-			y = (dc.font.ascent+dc.font.descent + 2) / 4;
-			XGCValues gcv;
-			gcv.foreground = col[ColFG];
-			XChangeGC(dpy, dc.gc, GCForeground, &gcv);
-			XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, (dc.h - y), dc.w, y);
-		
-		
-        dc.x += dc.w;
+		dc.x += dc.w;
 	}
 	dc.w = blw = TEXTW(m->ltsymbol);
 	drawtext(m->ltsymbol, dc.colors[0], True);
@@ -862,8 +837,15 @@ void drawbar(Monitor *m) {
 void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	char buf[256];
 	int i, x, y, h, len, olen;
+	// background
 	XSetForeground(dpy, dc.gc, col[ColBG]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
+	
+	// underline - move lower down?
+	XSetForeground(dpy, dc.gc, col[ColBorder]);
+	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.h - 3, dc.w, 3);
+	
+	// text
 	if(!text)
 		return;
 	olen = strlen(text);
@@ -876,6 +858,8 @@ void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	memcpy(buf, text, len);
 	if(len < olen)
 		for(i = len; i && i > len - 3; buf[--i] = '.');
+		
+		
 	XSetForeground(dpy, dc.gc, col[ColFG]);
 	if(dc.font.set)
 		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
