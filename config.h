@@ -23,7 +23,7 @@ static const char font[] = "-*-ohsnap.icons-medium-r-*-*-14-*-*-*-*-*-*-*";
 static const char colors[NUMCOLORS][ColLast][13] = {
     /* border    fg       	bg */
 	{ "#222222", "#666666", "#222222" },				// 01 - regular
-	{ "#FFFFFF", "#FFFFFF", "#222222" },				// 02 - selected
+	{ "#666666", "#666666", "#222222" },				// 02 - selected
 	{ "#222222", "#FF0000", "#222222" },				// 03 - urgent
 	{ "#222222", "#FFFFFF", "#222222" }, 				// 04 - occupied
 	{ "#A82222", "#A82222", "#222222" }, 				// 05 - red

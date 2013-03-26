@@ -840,11 +840,9 @@ void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	// background
 	XSetForeground(dpy, dc.gc, col[ColBG]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
-	
-	// underline - move lower down?
+	// underline
 	XSetForeground(dpy, dc.gc, col[ColBorder]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.h - 3, dc.w, 3);
-	
 	// text
 	if(!text)
 		return;
