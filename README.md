@@ -30,7 +30,6 @@ To do
 	* tag padding
 	* selected tag underline
 	* systray bg colour fix
-* bstack gaps
 * reload
 
 Screenshot
