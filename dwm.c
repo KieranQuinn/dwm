@@ -796,7 +796,7 @@ void drawbars(void) {
 void drawbar(Monitor *m) {
 	int x;
 	unsigned int i, occ = 0, urg = 0;
-	unsigned long *col;
+	unsigned long *col = dc.colors[0];
 	Client *c;
 	resizebarwin(m);
 	for(c = m->clients; c; c = c->next) {
@@ -804,8 +804,6 @@ void drawbar(Monitor *m) {
 		if(c->isurgent)
 			urg |= c->tags;
 	}
-	
-	// tags
 	dc.x = 0;
 	for(i = 0; i < LENGTH(tags); i++) {
 		dc.w = TEXTW(tags[i].name);
@@ -813,14 +811,10 @@ void drawbar(Monitor *m) {
 		drawtext(tags[i].name, col, True);
 		dc.x += dc.w;
 	}
-	
-	// layout
 	dc.w = blw = TEXTW(m->ltsymbol);
 	drawtext(m->ltsymbol, dc.colors[9], True);
 	dc.x += dc.w;
 	x = dc.x;
-	
-	// status
 	dc.w = TEXTW(stext);
 	dc.x = m->ww - dc.w;
 	if(showsystray && m == selmon) {
@@ -831,14 +825,10 @@ void drawbar(Monitor *m) {
 		dc.w = m->ww - x;
 	}
 	drawcoloredtext(stext);
-	
-	// title
 	if((dc.w = dc.x - x) > bh) {
 		dc.x = x;
-		// drawtext(m->sel->name, dc.colors[0], False);
 		drawtext(NULL, dc.colors[0], False);
 	}
-	
 	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
 	XSync(dpy, False);
 }
@@ -846,13 +836,10 @@ void drawbar(Monitor *m) {
 void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	char buf[256];
 	int i, x, y, h, len, olen;
-	// background
 	XSetForeground(dpy, dc.gc, col[ColBG]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
-	// underline
 	XSetForeground(dpy, dc.gc, col[ColBorder]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.h - 3, dc.w, 3);
-	// text
 	if(!text)
 		return;
 	olen = strlen(text);

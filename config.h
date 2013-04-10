@@ -57,7 +57,7 @@ static const Tag tags[] = {
 
 static const Rule rules[] = {
     /* class         	instance   	title 	    tags mask    	isfloating		iscentred   	monitor */
-	{ "Chrome",		NULL,       NULL,       1 << 0,    		False,   		False,			-1 },
+	{ "Google-chrome",	NULL,       NULL,       1 << 0,    		False,   		False,			-1 },
 	{ "Skype",			NULL,       NULL,       1 << 1,       	False,       	False,			-1 },
 	{ "URxvt",			NULL,       NULL,       1 << 2,       	True,       	True,			-1 },
 	{ "Geany",			NULL,       NULL,       1 << 3,       	False,       	False,			-1 },
@@ -65,8 +65,8 @@ static const Rule rules[] = {
 	{ "Pcmanfm",		NULL,       NULL,       1 << 5,       	False,       	False,			-1 },
 };
 
-static const char *menu[] = { "dmenu_run", "-i", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG], "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], NULL };
-static const char *webb[] = { "google-chrome", NULL, "Chrome" };
+static const char *menu[] = { "dmenu_run", "-i", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG], "-sb", colors[1][ColBG], "-sf", colors[9][ColFG], NULL };
+static const char *webb[] = { "google-chrome", NULL, "Google-chrome" };
 static const char *chat[] = { "skype", NULL, "Skype" };
 static const char *term[] = { "urxvtc", NULL, "URxvt" };
 static const char *edit[] = { "geany", NULL, "Geany" };
