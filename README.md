@@ -13,6 +13,7 @@ Instructions
 What it includes
 ----------------
 * statuscolors
+* statusallmons
 * centredfloating
 * savefloats
 * notitle
@@ -27,11 +28,17 @@ What it includes
 To do
 -----
 * re-write bar and text
-	* tag padding
-	* selected tag underline
 	* systray bg colour fix
-* reload
-
+* monocle gaps?
+* fix monocle to tile layout/resizing
+* hardcode status bar (configurable via config.h)
+* create better colouring system
+	* underline
+	* border
+	* foreground
+	* background
+	* layout
+	
 Screenshot
 ----------
 

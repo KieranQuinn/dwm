@@ -21,6 +21,7 @@ client
  *
  * To understand everything else, start reading main().
  */
+#include <time.h>
 #include <errno.h>
 #include <locale.h>
 #include <stdarg.h>
@@ -803,6 +804,8 @@ void drawbar(Monitor *m) {
 		if(c->isurgent)
 			urg |= c->tags;
 	}
+	
+	// tags
 	dc.x = 0;
 	for(i = 0; i < LENGTH(tags); i++) {
 		dc.w = TEXTW(tags[i].name);
@@ -810,28 +813,32 @@ void drawbar(Monitor *m) {
 		drawtext(tags[i].name, col, True);
 		dc.x += dc.w;
 	}
+	
+	// layout
 	dc.w = blw = TEXTW(m->ltsymbol);
-	drawtext(m->ltsymbol, dc.colors[0], True);
+	drawtext(m->ltsymbol, dc.colors[9], True);
 	dc.x += dc.w;
 	x = dc.x;
-	if(m == selmon) {
-		dc.w = TEXTW(stext);
-		dc.x = m->ww - dc.w;
-		if(showsystray && m == selmon) {
-			dc.x -= getsystraywidth();
-		}
-		if(dc.x < x) {
-			dc.x = x;
-			dc.w = m->ww - x;
-		}
-		drawcoloredtext(stext);
+	
+	// status
+	dc.w = TEXTW(stext);
+	dc.x = m->ww - dc.w;
+	if(showsystray && m == selmon) {
+		dc.x -= getsystraywidth();
 	}
-	else
-		dc.x = m->ww;
+	if(dc.x < x) {
+		dc.x = x;
+		dc.w = m->ww - x;
+	}
+	drawcoloredtext(stext);
+	
+	// title
 	if((dc.w = dc.x - x) > bh) {
 		dc.x = x;
+		// drawtext(m->sel->name, dc.colors[0], False);
 		drawtext(NULL, dc.colors[0], False);
 	}
+	
 	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
 	XSync(dpy, False);
 }
@@ -887,12 +894,11 @@ void drawcoloredtext(char *text) {
 		else if(first)
 			ox = dc.x += textnw(&c, 1);
 		*ptr = c;
-		col = dc.colors[c - 1];
+		col = dc.colors[c-1];
 		buf = ++ptr;
 	}
 	if(!first)
 		dc.x -= (dc.font.ascent + dc.font.descent) / 2;
-		
 	drawtext(buf, col, True);
 	dc.x = ox;
 }
@@ -2285,8 +2291,7 @@ void togglefloating(const Arg *arg) {
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
 	if(selmon->sel->isfloating) /*restore last known float dimensions*/
-		resize(selmon->sel, selmon->sel->sfx, selmon->sel->sfy,
-		       selmon->sel->sfw, selmon->sel->sfh, False);
+		resize(selmon->sel, selmon->sel->sfx, selmon->sel->sfy, selmon->sel->sfw, selmon->sel->sfh, False);
 	else { /*save last known float dimensions*/
 		selmon->sel->sfx = selmon->sel->x;
 		selmon->sel->sfy = selmon->sel->y;
