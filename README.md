@@ -10,7 +10,7 @@ Instructions
 	cd dwm && sudo make clean install
 	
 	
-What it includes
+Patches/Features
 ----------------
 * statuscolors
 * statusallmons
@@ -24,20 +24,16 @@ What it includes
 * keysymfix
 * bstack
 * runorraise
+
+New
+---
+* tag padding
 	
 To do
 -----
-* re-write bar and text
-	* systray bg colour fix
 * monocle gaps?
 * fix monocle to tile layout/resizing
 * hardcode status bar (configurable via config.h)
-* create better colouring system
-	* underline
-	* border
-	* foreground
-	* background
-	* layout
 	
 Screenshot
 ----------

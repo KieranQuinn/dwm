@@ -895,15 +895,12 @@ void expose(XEvent *e) {
 }
 
 void focus(Client *c) {
-	if(!c || !ISVISIBLE(c))
-		for(c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
+	if(!c || !ISVISIBLE(c)) for(c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
 	if(selmon->sel && selmon->sel != c)
 		unfocus(selmon->sel, False);
 	if(c) {
-		if(c->mon != selmon)
-			selmon = c->mon;
-		if(c->isurgent)
-			clearurgent(c);
+		if(c->mon != selmon) selmon = c->mon;
+		if(c->isurgent) clearurgent(c);
 		detachstack(c);
 		attachstack(c);
 		grabbuttons(c, True);
@@ -923,10 +920,8 @@ void focusin(XEvent *e) {
 
 void focusmon(const Arg *arg) {
 	Monitor *m;
-	if(!mons->next)
-		return;
-	if((m = dirtomon(arg->i)) == selmon)
-		return;
+	if(!mons->next) return;
+	if((m = dirtomon(arg->i)) == selmon) return;
 	unfocus(selmon->sel, True);
 	selmon = m;
 	focus(NULL);
@@ -934,20 +929,13 @@ void focusmon(const Arg *arg) {
 
 void focusstack(const Arg *arg) {
 	Client *c = NULL, *i;
-	if(!selmon->sel)
-		return;
+	if(!selmon->sel) return;
 	if(arg->i > 0) {
 		for(c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
-		if(!c)
-			for(c = selmon->clients; c && !ISVISIBLE(c); c = c->next);
+		if(!c) for(c = selmon->clients; c && !ISVISIBLE(c); c = c->next);
 	} else {
-		for(i = selmon->clients; i != selmon->sel; i = i->next)
-			if(ISVISIBLE(i))
-				c = i;
-		if(!c)
-			for(; i; i = i->next)
-				if(ISVISIBLE(i))
-					c = i;
+		for(i = selmon->clients; i != selmon->sel; i = i->next) if(ISVISIBLE(i)) c = i;
+		if(!c) for(; i; i = i->next) if(ISVISIBLE(i)) c = i;
 	}
 	if(c) {
 		focus(c);
@@ -961,12 +949,10 @@ Atom getatomprop(Client *c, Atom prop) {
 	unsigned char *p = NULL;
 	Atom da, atom = None;
 	Atom req = XA_ATOM;
-	if(prop == xatom[XembedInfo])
-		req = xatom[XembedInfo];
+	if(prop == xatom[XembedInfo]) req = xatom[XembedInfo];
 	if(XGetWindowProperty(dpy, c->win, prop, 0L, sizeof atom, False, req, &da, &di, &dl, &dl, &p) == Success && p) {
  		atom = *(Atom *)p;
-		if(da == xatom[XembedInfo] && dl == 2)
-			atom = ((Atom *)p)[1];
+		if(da == xatom[XembedInfo] && dl == 2) atom = ((Atom *)p)[1];
 		XFree(p);
 	}
 	return atom;
@@ -975,8 +961,7 @@ Atom getatomprop(Client *c, Atom prop) {
 unsigned int getsystraywidth() {
 	unsigned int w = 0;
 	Client *i;
-	if(showsystray)
-		for(i = systray->icons; i; w += i->w + systrayspacing, i = i->next) ;
+	if(showsystray) for(i = systray->icons; i; w += i->w + systrayspacing, i = i->next) ;
 	return w ? w + systrayspacing : 1;
 }
 
