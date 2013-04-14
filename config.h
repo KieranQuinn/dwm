@@ -7,17 +7,17 @@
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 	
-static const unsigned int tagpadding = 25;		/* inner padding of tags */
-static const unsigned int systrayspacing = 2;	/* systray spacing */
-static const Bool showsystray = True;			/* false means no systray */
-static const unsigned int gappx = 8;			/* gaps between windows */
-static const unsigned int borderpx = 3;			/* border pixel of windows */
-static const unsigned int snap = 32;			/* snap pixel */
-static const Bool showbar = True;				/* false means no bar */
-static const Bool topbar = True;				/* false means bottom bar */
-static const float mfact = 0.50;				/* factor of master area size [0.05..0.95] */
-static const int nmaster = 1;					/* number of clients in master area */
-static const Bool resizehints = False;			/* true means respect size hints in tiled resizals */
+static const unsigned int tagpadding = 25;      /* inner padding of tags */
+static const unsigned int systrayspacing = 2;   /* systray spacing */
+static const Bool showsystray = True;           /* false means no systray */
+static const unsigned int gappx = 8;            /* gaps between windows */
+static const unsigned int borderpx = 3;         /* border pixel of windows */
+static const unsigned int snap = 32;            /* snap pixel */
+static const Bool showbar = True;               /* false means no bar */
+static const Bool topbar = True;                /* false means bottom bar */
+static const float mfact = 0.50;                /* factor of master area size [0.05..0.95] */
+static const int nmaster = 1;                   /* number of clients in master area */
+static const Bool resizehints = False;          /* true means respect size hints in tiled resizals */
 static const char font[] = "-*-ohsnap.icons-medium-r-*-*-14-*-*-*-*-*-*-*";
 
 static const char colors[NUMCOLORS][ColLast][13] = {
@@ -46,7 +46,7 @@ static const Layout layouts[] = {
 };
 
 static const Tag tags[] = {
-	/* name		layout			mfact	nmaster */
+	/* name		layout          mfact   nmaster */
 	{ "web",	&layouts[0],	-1,		-1 },
 	{ "chat",	&layouts[0],	-1,		-1 },
 	{ "term",	&layouts[3],	-1,		-1 },
@@ -57,12 +57,12 @@ static const Tag tags[] = {
 
 static const Rule rules[] = {
     /* class         	instance   	title 	    tags mask    	isfloating		iscentred   	monitor */
-	{ "Google-chrome",	NULL,		NULL,		1 << 0,			False,			False,			-1 },
-	{ "Skype",			NULL,		NULL,		1 << 1,			False,			False,			-1 },
-	{ "URxvt",			NULL,		NULL,		1 << 2,			True,			True,			-1 },
-	{ "Geany",			NULL,		NULL,		1 << 3,			False,			False,			-1 },
-	{ "Vlc",			NULL,		NULL,		1 << 4,			False,			False,			-1 },
-	{ "Pcmanfm",		NULL,		NULL,		1 << 5,			False,			False,			-1 },
+	{ "Google-chrome",  NULL,       NULL,       1 << 0,			False,			False,			-1 },
+	{ "Skype",          NULL,       NULL,       1 << 1,			False,			False,			-1 },
+	{ "URxvt",          NULL,       NULL,		1 << 2,			True,			True,			-1 },
+	{ "Geany",          NULL,       NULL,		1 << 3,			False,			False,			-1 },
+	{ "Vlc",            NULL,       NULL,		1 << 4,			False,			False,			-1 },
+	{ "Pcmanfm",        NULL,       NULL,		1 << 5,			False,			False,			-1 },
 };
 
 static const char *menu[] = { "dmenu_run", "-i", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG], "-sb", colors[1][ColBG], "-sf", colors[9][ColFG], NULL };
@@ -96,7 +96,7 @@ static Key keys[] = {
 	{ MODKEY,          	XK_Tab,   	view,           {0} },
 	{ MODKEY|ShiftMask,	XK_f,   	togglefloating, {0} },
 	{ MODKEY,      		XK_space,	setlayout,      {0} },
-	{ MODKEY,			XK_t,		setlayout,		{.v = &layouts[0] } },
+	{ MODKEY,           XK_t,       setlayout,      {.v = &layouts[0] } },
 	{ MODKEY,          	XK_b,    	setlayout,      {.v = &layouts[1] } },
 	{ MODKEY,         	XK_m,  		setlayout,      {.v = &layouts[2] } },
 	{ MODKEY,          	XK_f,   	setlayout,      {.v = &layouts[3] } },
