@@ -479,13 +479,13 @@ void buttonpress(XEvent *e) {
 	if(ev->window == selmon->barwin) {
 		i = x = 0;
 		do
-			x += TEXTW(tags[i].name);
+			x += TEXTW(tags[i].name) + tagpadding;
 		while(ev->x >= x && ++i < LENGTH(tags));
 		if(i < LENGTH(tags)) {
 			click = ClkTagBar;
 			arg.ui = 1 << i;
 		}
-		else if(ev->x < x + blw)
+		else if(ev->x < x + blw + tagpadding)
 			click = ClkLtSymbol;
 		else
 			click = ClkStatusText;
@@ -793,132 +793,51 @@ void drawbars(void) {
 		drawbar(m);
 }
 
-/*
 void drawbar(Monitor *m) {
-	int x;
-	unsigned int i, occ = 0, urg = 0;
-	unsigned long *col = dc.colors[0];
+	dc.x = 0;
 	Client *c;
+	unsigned long *col;
+	unsigned int i, occ = 0, urg = 0;
 	resizebarwin(m);
 	for(c = m->clients; c; c = c->next) {
 		occ |= c->tags;
-		if(c->isurgent)
-			urg |= c->tags;
+		if(c->isurgent) urg |= c->tags;
 	}
-	dc.x = 0;
-	for(i = 0; i < LENGTH(tags); i++) {
-		dc.w = TEXTW(tags[i].name);
-		col = dc.colors[(m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2:(occ & 1 << i ? 3:0))];
-		drawtext(tags[i].name, col, True);
-		dc.x += dc.w;
-	}
-	dc.w = blw = TEXTW(m->ltsymbol);
-	drawtext(m->ltsymbol, dc.colors[9], True);
-	dc.x += dc.w;
-	x = dc.x;
-	dc.w = TEXTW(stext);
-	dc.x = m->ww - dc.w;
-	if(showsystray && m == selmon) {
-		dc.x -= getsystraywidth();
-	}
-	if(dc.x < x) {
-		dc.x = x;
-		dc.w = m->ww - x;
-	}
-	drawcoloredtext(stext);
-	if((dc.w = dc.x - x) > bh) {
-		dc.x = x;
-		drawtext(m->sel->name, col, False);
-		//drawtext(NULL, dc.colors[0], False);
-	}
-	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
-	XSync(dpy, False);
-}
-*/
-
-void drawbar(Monitor *m) {
-	unsigned int i, occ = 0, urg = 0;
-	unsigned long *col;
-	
-	resizebarwin(m);
-	
 	XSetForeground(dpy, dc.gc, dc.colors[0][ColBG]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, m->mw, bh);
-	
-	Client *c;
-	for (c = m->clients; c; c = c->next)
-	{
-		occ |= c->tags;
-		if(c->isurgent)
-			urg |= c->tags;
-	}
-	
-	dc.x = 0;
-	
-	for (i = 0; i < LENGTH(tags); i++)
-	{
-		dc.w = TEXTW(tags[i].name);
-		col = dc.colors[(m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2:(occ & 1 << i ? 3:0))];
+	for(i = 0; i < LENGTH(tags); i++) {
+		col = dc.colors[(m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2 : (occ & 1 << i ? 3 : 0))];
 		drawtext(tags[i].name, col, True);
-		
 		XSetForeground(dpy, dc.gc, col[ColBorder]);
 		XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.h - borderpx, dc.w, borderpx);
-		
 		dc.x += dc.w;
 	}
-	
-	dc.w = TEXTW(m->ltsymbol);
-	drawtext(m->ltsymbol, dc.colors[9], False);
-	
-	dc.w = TEXTW(stext);
-	dc.x = m->ww - dc.w;
+	drawtext(m->ltsymbol, dc.colors[9], True);
+	if(showsystray && m == selmon) dc.x = (m->ww - TEXTW(stext)) - getsystraywidth();
+	else dc.x = m->ww - TEXTW(stext);
 	drawcoloredtext(stext);
-	
-	// notes:
-	// tagpadding
-	// create drawbox func
-	
-	// other:
-	// char test[] = "test";
-	// dc.x += dc.w;
-	// dc.w = TEXTW(test);
-	// drawtext(test, dc.colors[0], False);
-	
 	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
 	XSync(dpy, False);
 }
 
 void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	char buf[256];
-	int i, x, y, h, len, olen;
-	
+	unsigned int i, x, y, h, len, olen;
+	if(!text) return;
+	dc.w = TEXTW(text) + tagpadding;
 	XSetForeground(dpy, dc.gc, col[ColBG]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
-	
-	if(!text)
-		return;
-		
 	olen = strlen(text);
-	
-	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
+	h = pad ? (dc.font.ascent + dc.font.descent + tagpadding) : 0;
 	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
  	x = dc.x + (h / 2);
-	
 	for(len = MIN(olen, sizeof buf); len && textnw(text, len) > dc.w - h; len--);
-	
-	if(!len)
-		return;
-		
+	if(!len) return;
 	memcpy(buf, text, len);
-	
-	if(len < olen)
-		for(i = len; i && i > len - 3; buf[--i] = '.');
-	
+	if(len < olen) for(i = len; i && i > len - 3; buf[--i] = '.');
 	XSetForeground(dpy, dc.gc, col[ColFG]);
-	if(dc.font.set)
-		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
-	else
-		XDrawString(dpy, dc.drawable, dc.gc, x, y, buf, len);
+	if(dc.font.set) XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
+	else XDrawString(dpy, dc.drawable, dc.gc, x, y, buf, len);
 }
 
 void drawcoloredtext(char *text) {
@@ -934,7 +853,7 @@ void drawcoloredtext(char *text) {
 		*ptr = 0;
 		if(i) {
 			dc.w = selmon->ww - dc.x;
-			drawtext(buf, col, first);
+			drawtext(buf, col, False);
 			dc.x += textnw(buf, i) + textnw(&c, 1);
 			if(first)
 				dc.x += (dc.font.ascent + dc.font.descent) / 2;
@@ -948,7 +867,7 @@ void drawcoloredtext(char *text) {
 	}
 	if(!first)
 		dc.x -= (dc.font.ascent + dc.font.descent) / 2;
-	drawtext(buf, col, True);
+	drawtext(buf, col, False);
 	dc.x = ox;
 }
 
