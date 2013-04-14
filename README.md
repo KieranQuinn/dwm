@@ -1,7 +1,7 @@
 Requirements
 ------------
 * Xlib header files
-* ohsnap & terminus fonts
+* ohsnap font
 
 Instructions
 ------------

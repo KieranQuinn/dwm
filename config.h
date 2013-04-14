@@ -6,7 +6,7 @@
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
-
+	
 static const unsigned int tagpadding = 25;		/* inner padding of tags */
 static const unsigned int systrayspacing = 2;	/* systray spacing */
 static const Bool showsystray = True;			/* false means no systray */
@@ -18,7 +18,6 @@ static const Bool topbar = True;				/* false means bottom bar */
 static const float mfact = 0.50;				/* factor of master area size [0.05..0.95] */
 static const int nmaster = 1;					/* number of clients in master area */
 static const Bool resizehints = False;			/* true means respect size hints in tiled resizals */
-
 static const char font[] = "-*-ohsnap.icons-medium-r-*-*-14-*-*-*-*-*-*-*";
 
 static const char colors[NUMCOLORS][ColLast][13] = {
@@ -40,10 +39,10 @@ static const char colors[NUMCOLORS][ColLast][13] = {
 
 static const Layout layouts[] = {
 	/* symbol	gaps  	arrange */
-	{ "þ", 	True,	tile },
-	{ "ü", 	True, 	bstack },
-	{ "ÿ", 	False, 	monocle },
-	{ "ý", 	False, 	NULL },
+	{ "þ", 		True,	tile },
+	{ "ü", 		True, 	bstack },
+	{ "ÿ", 		False, 	monocle },
+	{ "ý", 		False, 	NULL },
 };
 
 static const Tag tags[] = {
