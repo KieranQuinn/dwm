@@ -793,6 +793,7 @@ void drawbars(void) {
 		drawbar(m);
 }
 
+/*
 void drawbar(Monitor *m) {
 	int x;
 	unsigned int i, occ = 0, urg = 0;
@@ -827,8 +828,62 @@ void drawbar(Monitor *m) {
 	drawcoloredtext(stext);
 	if((dc.w = dc.x - x) > bh) {
 		dc.x = x;
-		drawtext(NULL, dc.colors[0], False);
+		drawtext(m->sel->name, col, False);
+		//drawtext(NULL, dc.colors[0], False);
 	}
+	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
+	XSync(dpy, False);
+}
+*/
+
+void drawbar(Monitor *m) {
+	unsigned int i, occ = 0, urg = 0;
+	unsigned long *col;
+	
+	resizebarwin(m);
+	
+	XSetForeground(dpy, dc.gc, dc.colors[0][ColBG]);
+	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, m->mw, bh);
+	
+	Client *c;
+	for (c = m->clients; c; c = c->next)
+	{
+		occ |= c->tags;
+		if(c->isurgent)
+			urg |= c->tags;
+	}
+	
+	dc.x = 0;
+	
+	for (i = 0; i < LENGTH(tags); i++)
+	{
+		dc.w = TEXTW(tags[i].name);
+		col = dc.colors[(m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2:(occ & 1 << i ? 3:0))];
+		drawtext(tags[i].name, col, True);
+		
+		XSetForeground(dpy, dc.gc, col[ColBorder]);
+		XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.h - borderpx, dc.w, borderpx);
+		
+		dc.x += dc.w;
+	}
+	
+	dc.w = TEXTW(m->ltsymbol);
+	drawtext(m->ltsymbol, dc.colors[9], False);
+	
+	dc.w = TEXTW(stext);
+	dc.x = m->ww - dc.w;
+	drawcoloredtext(stext);
+	
+	// notes:
+	// tagpadding
+	// create drawbox func
+	
+	// other:
+	// char test[] = "test";
+	// dc.x += dc.w;
+	// dc.w = TEXTW(test);
+	// drawtext(test, dc.colors[0], False);
+	
 	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
 	XSync(dpy, False);
 }
@@ -836,22 +891,29 @@ void drawbar(Monitor *m) {
 void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
 	char buf[256];
 	int i, x, y, h, len, olen;
+	
 	XSetForeground(dpy, dc.gc, col[ColBG]);
 	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, dc.w, dc.h);
-	XSetForeground(dpy, dc.gc, col[ColBorder]);
-	XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.h - 3, dc.w, 3);
+	
 	if(!text)
 		return;
+		
 	olen = strlen(text);
+	
 	h = pad ? (dc.font.ascent + dc.font.descent) : 0;
 	y = dc.y + ((dc.h + dc.font.ascent - dc.font.descent) / 2);
  	x = dc.x + (h / 2);
+	
 	for(len = MIN(olen, sizeof buf); len && textnw(text, len) > dc.w - h; len--);
+	
 	if(!len)
 		return;
+		
 	memcpy(buf, text, len);
+	
 	if(len < olen)
 		for(i = len; i && i > len - 3; buf[--i] = '.');
+	
 	XSetForeground(dpy, dc.gc, col[ColFG]);
 	if(dc.font.set)
 		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
@@ -1184,8 +1246,7 @@ void manage(Window w, XWindowAttributes *wa) {
 	if(c->y + HEIGHT(c) > c->mon->my + c->mon->mh)
 		c->y = c->mon->my + c->mon->mh - HEIGHT(c);
 	c->x = MAX(c->x, c->mon->mx);
-	c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
-	           && (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
+	c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx) && (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
 	c->bw = borderpx;
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
