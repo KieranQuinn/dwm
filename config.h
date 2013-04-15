@@ -22,7 +22,7 @@ static const char font[] = "-*-ohsnap.icons-medium-r-*-*-14-*-*-*-*-*-*-*";
 
 static const char colors[NUMCOLORS][ColLast][13] = {
 	/* border    fg       	bg */
-	{ "#2D2D2D", "#FFFFFF", "#2D2D2D" },		/* 01 - regular */
+	{ "#2D2D2D", "#FFFFFF", "#2D2D2D" },        /* 01 - regular */
 	{ "#D64937", "#FFFFFF", "#2D2D2D" },		/* 02 - selected */
 	{ "#2D2D2D", "#FF0000", "#2D2D2D" },		/* 03 - urgent */
 	{ "#2D2D2D", "#666666", "#2D2D2D" },		/* 04 - occupied */

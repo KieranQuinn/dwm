@@ -303,6 +303,10 @@ static void zoom(const Arg *arg);
 static void bstack(Monitor *m);
 static void runorraise(const Arg *arg);
 
+static void get_cpu_avg(char *cpu);
+static void get_mem_str(char *mem);
+static void get_datetime(char *datetime);
+
 
 /* variables */
 static Systray *systray = NULL;
@@ -813,11 +817,63 @@ void drawbar(Monitor *m) {
 		dc.x += dc.w;
 	}
 	drawtext(m->ltsymbol, dc.colors[9], True);
-	if(showsystray && m == selmon) dc.x = (m->ww - TEXTW(stext)) - getsystraywidth();
+	/*if(showsystray && m == selmon) dc.x = (m->ww - TEXTW(stext)) - getsystraywidth();
 	else dc.x = m->ww - TEXTW(stext);
-	drawcoloredtext(stext);
+	drawcoloredtext(stext);*/
+	// cpu, mem, hdd, music, volume, date
+	char status[256], cpu[16], mem[16], datetime[16];
+	
+	get_cpu_avg(cpu);
+	get_mem_str(mem);
+	get_datetime(datetime);
+	
+	snprintf(status, 256, "%s %s %s", cpu, mem, datetime);
+	
+	if(showsystray && m == selmon) dc.x = (m->ww - TEXTW(status)) - getsystraywidth();
+	else dc.x = m->ww - TEXTW(status);
+	drawcoloredtext(status);
+	
 	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
 	XSync(dpy, False);
+}
+
+static void get_cpu_str(char *cpu) {
+	FILE *fd;
+	if(!(fd = fopen("/proc/stat", "r"))) {
+      fprintf(stderr, "Cannot open '/proc/stat' for reading.\n");
+      return;
+   }
+}
+
+void get_cpu_avg(char *cpu) {
+	double avgs[3];
+	if(getloadavg(avgs, 3) < 0) {
+		perror("getloadavg");
+		return;
+	}
+	snprintf(cpu, 16, "%.2f %.2f %.2f", avgs[0], avgs[1], avgs[2]);
+}
+
+void get_mem_str(char *mem) {
+   FILE *fd;
+   int total, free, buffers, cached, total_used;
+   if(!(fd = fopen("/proc/meminfo", "r"))) {
+      fprintf(stderr, "Cannot open '/proc/meminfo' for reading.\n");
+      return;
+   }
+   fscanf(fd, "MemTotal: %d kB\n", &total);
+   fscanf(fd, "MemFree: %d kB\n", &free);
+   fscanf(fd, "Buffers: %d kB\n", &buffers);
+   fscanf(fd, "Cached: %d kB\n", &cached);
+   total_used = (total - free - buffers - cached) / 1024;
+   fclose(fd);
+   snprintf(mem, 16, "%dMB", total_used);
+}
+
+void get_datetime(char *datetime) {
+   time_t current;
+   time(&current);
+   strftime(datetime, 16, "%H:%M %d/%m/%g", localtime(&current));
 }
 
 void drawtext(const char *text, unsigned long col[ColLast], Bool pad) {
