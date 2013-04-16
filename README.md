@@ -6,10 +6,10 @@ Requirements
 Instructions
 ------------
 
-	git clone https://github.com/KieranQuinn/dwm.git
-	cd dwm && sudo make clean install
-	
-	
+    git clone https://github.com/KieranQuinn/dwm.git
+    cd dwm && sudo make clean install
+    
+    
 Patches/Features
 ----------------
 * statuscolors
@@ -27,14 +27,13 @@ Patches/Features
 
 New
 ---
-* tag padding
-	
+* tag padding (configurable via config.h)
+    
 To do
 -----
 * monocle gaps?
 * fix monocle to tile layout/resizing
-* hardcode status bar (configurable via config.h)
-	
+    
 Screenshot
 ----------
 
