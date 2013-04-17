@@ -58,13 +58,14 @@ static const Tag tags[] = {
 };
 
 static const Rule rules[] = {
-    /* class            instance    title       tags mask       isfloating      iscentred       monitor */
-    { "Google-chrome",  NULL,       NULL,       1 << 0,         False,          False,          -1 },
-    { "Skype",          NULL,       NULL,       1 << 1,         False,          False,          -1 },
-    { "URxvt",          NULL,       NULL,       1 << 2,         True,           True,           -1 },
-    { "Geany",          NULL,       NULL,       1 << 3,         False,          False,          -1 },
-    { "Vlc",            NULL,       NULL,       1 << 4,         False,          False,          -1 },
-    { "Pcmanfm",        NULL,       NULL,       1 << 5,         False,          False,          -1 },
+    /* class                instance    title       tags mask       isfloating      iscentred       monitor */
+    { "Google-chrome",      NULL,       NULL,       1 << 0,         False,          False,          -1 },
+    { "Skype",              NULL,       NULL,       1 << 1,         False,          False,          -1 },
+    { "URxvt",              NULL,       NULL,       1 << 2,         True,           True,           -1 },
+    { "Geany",              NULL,       NULL,       1 << 3,         False,          False,          -1 },
+    { "Vlc",                NULL,       NULL,       1 << 4,         False,          False,          -1 },
+    { "Pcmanfm",            NULL,       NULL,       1 << 5,         False,          False,          -1 },
+    { "Transmission-gtk",   NULL,       NULL,       1 << 5,         False,          False,          -1 },
 };
 
 static const char *menu[] = { "dmenu_run", "-i", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG], "-sb", colors[1][ColBG], "-sf", colors[9][ColFG], NULL };

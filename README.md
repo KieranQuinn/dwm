@@ -25,9 +25,12 @@ Patches/Features
 * bstack
 * runorraise
 
-New
+New/Fixes
 ---
-* tag padding (configurable via config.h)
+* re-wrote drawbar
+* selected tag underline (configurable via config.h)
+* tag spacing & padding (configurable via config.h)
+* bstack horizonal gaps
     
 To do
 -----
