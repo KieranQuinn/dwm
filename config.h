@@ -25,7 +25,7 @@ static const char font[] = "-*-ohsnap.icons-medium-r-*-*-14-*-*-*-*-*-*-*";
 static const char colors[NUMCOLORS][ColLast][13] = {
     /* border    fg         bg */
     { "#2D2D2D", "#FFFFFF", "#2D2D2D" },        /* 01 - regular */
-    { "#D64937", "#FFFFFF", "#2D2D2D" },        /* 02 - selected */
+    { "#1F7B94", "#FFFFFF", "#2D2D2D" },        /* 02 - selected */
     { "#2D2D2D", "#FF0000", "#2D2D2D" },        /* 03 - urgent */
     { "#2D2D2D", "#666666", "#2D2D2D" },        /* 04 - occupied */
     { "#2D2D2D", "#A82222", "#2D2D2D" },        /* 05 - red */
@@ -76,9 +76,13 @@ static const char *edit[] = { "geany", NULL, "Geany" };
 static const char *mdia[] = { "vlc", NULL, "Vlc" };
 static const char *file[] = { "pcmanfm", NULL, "Pcmanfm" };
 static const char *prts[] = { "scrot", NULL };
-static const char *mute[] = { "amixer", "-q", "sset", "Master", "toggle", NULL };
-static const char *volu[] = { "amixer", "-q", "sset", "Master", "5%+", "unmute", NULL };
-static const char *vold[] = { "amixer", "-q", "sset", "Master", "5%-", "unmute", NULL };
+static const char *play[] = { "ncmpcpp", "toggle" };
+static const char *stop[] = { "ncmpcpp", "stop" };
+static const char *prev[] = { "ncmpcpp", "prev" };
+static const char *next[] = { "ncmpcpp", "next" };
+static const char *mute[] = { "amixer", "-q", "set", "PCM", "toggle", NULL };
+static const char *volu[] = { "amixer", "-q", "set", "PCM", "5%+", "unmute", NULL };
+static const char *vold[] = { "amixer", "-q", "set", "PCM", "5%-", "unmute", NULL };
 
 static Key keys[] = {
     { MONKEY,           XK_p,       spawn,          {.v = menu } },
@@ -89,6 +93,10 @@ static Key keys[] = {
     { MONKEY,           XK_m,       runorraise,     {.v = mdia } },
     { MONKEY,           XK_f,       runorraise,     {.v = file } },
     { MONKEY,           XK_Print,   spawn,          {.v = prts } },
+    { MONKEY,           XK_F5,      spawn,          {.v = play } },
+    { MONKEY,           XK_F6,      spawn,          {.v = stop } },
+    { MONKEY,           XK_F7,      spawn,          {.v = prev } },
+    { MONKEY,           XK_F8,      spawn,          {.v = next } },
     { MONKEY,           XK_F10,     spawn,          {.v = mute } },
     { MONKEY,           XK_F11,     spawn,          {.v = vold } },
     { MONKEY,           XK_F12,     spawn,          {.v = volu } },

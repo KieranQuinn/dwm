@@ -813,7 +813,7 @@ void drawbar(Monitor *m) {
         XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.h - taglinepx, dc.w, taglinepx);
         dc.x += dc.w + tagspacing;
     }
-    drawtext(m->ltsymbol, dc.colors[9], True);
+    drawtext(m->ltsymbol, dc.colors[5], True);
     if(showsystray && m == selmon)
         dc.x = (m->ww - TEXTW(stext)) - getsystraywidth();
     else
