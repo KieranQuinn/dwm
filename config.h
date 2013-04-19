@@ -9,7 +9,7 @@
     
 static const unsigned int tagspacing = 3;       /* space between tags */
 static const unsigned int tagpadding = 25;      /* inner padding of tags */
-static const unsigned int taglinepx = 3;        /* height of tag underline */
+static const unsigned int taglinepx = 2;        /* height of tag underline */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const Bool showsystray = True;           /* false means no systray */
 static const unsigned int gappx = 8;            /* gaps between windows */

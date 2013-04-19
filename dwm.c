@@ -805,7 +805,7 @@ void drawbar(Monitor *m) {
     }
     dc.x = 0;
     XSetForeground(dpy, dc.gc, dc.colors[0][ColBG]);
-    XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, m->mw, bh);
+    XFillRectangle(dpy, dc.drawable, dc.gc, dc.x, dc.y, sw, bh);
     for(i = 0; i < LENGTH(tags); i++) {
         col = dc.colors[(m->tagset[m->seltags] & 1 << i) ? 1 : (urg & 1 << i ? 2 : (occ & 1 << i ? 3 : 0))];
         drawtext(tags[i].name, col, True);
@@ -1606,7 +1606,7 @@ void setup(void) {
     initfont(font);
     sw = DisplayWidth(dpy, screen);
     sh = DisplayHeight(dpy, screen);
-    bh = dc.h = dc.font.height + 7;
+    bh = dc.h = dc.font.height + 8;
     updategeom();
     /* init atoms */
     wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False);
